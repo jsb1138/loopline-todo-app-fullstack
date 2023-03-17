@@ -1,6 +1,6 @@
 ## To Do App - Fullstack Version
 
-This version makes use of an Rest API built on a Go backend which employs an AWS Aurora PostgreSQL instance.
+This version makes use of a Rest API built on a Go backend which employs an AWS Aurora PostgreSQL instance.
 
 To run the app, clone the repo, install dependencies and then run the development server:
 
