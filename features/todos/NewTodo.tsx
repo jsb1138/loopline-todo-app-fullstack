@@ -28,7 +28,7 @@ function NewToDo() {
         dispatch(addTodos(newTodo));
         setTitle("");
         setDesc("");
-        const response = await fetch("http://localhost:8080/todo", {
+        const response = await fetch("http://3.125.43.144:8080/todo", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

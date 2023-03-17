@@ -14,15 +14,15 @@ function App() {
   const fetchTodos = async () => {
     try {
       // setIsLoading(!isLoading);
-      const response = await fetch("http://localhost:8080/todos");
+      const response = await fetch("http://3.125.43.144:8080/todos");
       const data = await response.json();
-      console.log("FETCH RESPONSE:", data);
       if (data) {
         dispatch(setInitialTodos(data));
         setIsLoading(!isLoading);
+        console.log("DATA FOUND");
       } else {
         setIsLoading(!isLoading);
-        console.log("NO DATA");
+        console.log("NO DATA FOUND");
       }
     } catch (error) {
       console.log(error);

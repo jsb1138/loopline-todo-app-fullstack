@@ -11,7 +11,7 @@ export default function BatchDeleteButton() {
 
   const batchDeleteHandler = async (ids: string[]) => {
     try {
-      const response = await fetch(`http://localhost:8080/todos/${ids}`, {
+      const response = await fetch(`http://3.125.43.144:8080/todos/${ids}`, {
         method: "DELETE",
       });
       const data = await response.json();

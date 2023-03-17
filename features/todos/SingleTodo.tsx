@@ -38,7 +38,7 @@ export default function SingleTodo(props: SingleTodoProps) {
     try {
       dispatch(deselectTodos(id));
       dispatch(removeTodos(id));
-      const response = await fetch(`http://localhost:8080/todo/${id}`, {
+      const response = await fetch(`http://3.125.43.144:8080/todo/${id}`, {
         method: "DELETE",
       });
       const data = await response.json();
@@ -66,7 +66,7 @@ export default function SingleTodo(props: SingleTodoProps) {
     description: string
   ) => {
     try {
-      const response = await fetch(`http://localhost:8080/todo/${id}`, {
+      const response = await fetch(`http://3.125.43.144:8080/todo/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -92,7 +92,7 @@ export default function SingleTodo(props: SingleTodoProps) {
   ) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:8080/todo/${id}`, {
+      const response = await fetch(`http://3.125.43.144:8080/todo/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
