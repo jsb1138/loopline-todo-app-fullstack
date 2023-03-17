@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "@/redux/store";
 
-const initialState = [];
+const initialState: string[] = [];
 
 const selectedSlice = createSlice({
   name: "selectedTodos",
