@@ -40,86 +40,16 @@ const todoSlice = createSlice({
         return todo;
       });
     },
-    // // select todos
-    // selectTodos: (state, action) => {
-    //   switch (action.payload.type) {
-    //     case "SELECT":
-    //       return state.map((todo) => {
-    //         if (todo.id === action.payload.id) {
-    //           return {
-    //             ...todo,
-    //             selected: true,
-    //           };
-    //         }
-    //         return todo;
-    //       });
-    //     case "DESELECT":
-    //       return state.map((todo) => {
-    //         if (todo.id === action.payload.id) {
-    //           return {
-    //             ...todo,
-    //             selected: false,
-    //           };
-    //         }
-    //         return todo;
-    //       });
-    //     default:
-    //       return state;
-    //   }
-    // },
-    // // deselect all todos
-    // deselectTodos: (state, action) => {
-    //   return state.map((todo) => {
-    //     return {
-    //       ...todo,
-    //       selected: false,
-    //     };
-    //     return todo;
-    //   });
-    // },
-    // // edit select
-    // editSelect: (state, action) => {
-    //   switch (action.payload.type) {
-    //     case "SELECT":
-    //       return state.map((todo) => {
-    //         if (todo.id === action.payload.id) {
-    //           return {
-    //             ...todo,
-    //             editing: true,
-    //           };
-    //         }
-    //         return todo;
-    //       });
-    //     case "DESELECT":
-    //       return state.map((todo) => {
-    //         if (todo.id === action.payload.id) {
-    //           return {
-    //             ...todo,
-    //             editing: false,
-    //           };
-    //         }
-    //         return todo;
-    //       });
-    //     case "DESELECT ALL":
-    //       return state.map((todo) => {
-    //         return {
-    //           ...todo,
-    //           editing: false,
-    //         };
-    //         return todo;
-    //       });
-    //     default:
-    //       return state;
-    //   }
-    // },
-    // // get selected todos
-    // getSelectedTodos: (state, action) => {
-    //   return state.filter((item) => item.selected === true);
-    // },
     // // delete selected todos
-    // deleteSelectedTodos: (state, action) => {
-    //   return state.filter((item) => item.selected !== true);
-    // },
+    deleteSelectedTodos: (state, action) => {
+      return state.filter((todo) => {
+        if (!action.payload.includes(todo.id)) {
+          return {
+            ...todo,
+          };
+        }
+      });
+    },
   },
 });
 
@@ -127,12 +57,7 @@ export const {
   addTodos,
   removeTodos,
   updateTodos,
-  // selectTodos,
-  // deselectTodos,
-  // editSelect,
-  // getSelectedTodos,
-  // deleteSelectedTodos,
-  // setAllTodos,
+  deleteSelectedTodos,
   setInitialTodos,
 } = todoSlice.actions;
 

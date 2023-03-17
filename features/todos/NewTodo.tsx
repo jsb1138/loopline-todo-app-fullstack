@@ -24,7 +24,6 @@ function NewToDo() {
           title,
           description: desc,
         };
-        console.log("newTodo", newTodo);
         dispatch(addTodos(newTodo));
         setTitle("");
         setDesc("");
@@ -36,7 +35,6 @@ function NewToDo() {
           body: JSON.stringify(newTodo),
         });
         const data = await response.json();
-        console.log("POST RESPONSE", data);
       } catch (error) {
         console.log(error);
       }

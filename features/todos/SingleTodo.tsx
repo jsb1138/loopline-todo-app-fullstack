@@ -117,25 +117,9 @@ export default function SingleTodo(props: SingleTodoProps) {
       return;
     }
     dispatch(selectTodos(id));
-    //   if (props.selected.includes(id)) {
-    //     props.setSelected(props.selected.filter((item) => item !== id));
-    //     return;
-    //   }
-    //   props.setSelected((prevArr) => [...prevArr, id]);
-    //   // if (todo.editing) {
-    //   //   cancelUpdateHandler(id);
-    //   //   dispatch(editSelect({ type: "DESELECT ALL" }));
-    //   // }
-    //   // if (todo.selected) {
-    //   //   dispatch(selectTodos({ type: "DESELECT", id }));
-    //   //   return;
-    //   // }
-    //   // dispatch(selectTodos({ type: "SELECT", id }));
   }
 
-  // console.log("PROPS", props.todo.id);
   return (
-    // <> </>
     <div
       className={`todo fcsb ${
         selectedTodos.includes(props.todo.id) && "slctd-del"
