@@ -20,6 +20,6 @@ export type Todo = {
   id: string;
   title: string;
   description: string;
-  // selected: boolean;
-  // editing: boolean;
+  createdAt: string;
+  updatedAt: string;
 };

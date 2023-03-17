@@ -22,6 +22,8 @@ function NewToDo() {
           id: nanoid(),
           title,
           description: desc,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         };
         dispatch(addTodos(newTodo));
         setTitle("");
@@ -34,6 +36,7 @@ function NewToDo() {
           body: JSON.stringify(newTodo),
         });
         const data = await response.json();
+        console.log("POST RESPONSE:", data);
       } catch (error) {
         console.log(error);
       }

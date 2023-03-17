@@ -26,6 +26,7 @@ const todoSlice = createSlice({
             ...todo,
             title: action.payload.title,
             description: action.payload.description,
+            updatedAt: action.payload.updatedAt,
           };
         }
         return todo;

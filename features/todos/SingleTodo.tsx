@@ -36,6 +36,7 @@ export default function SingleTodo(props: SingleTodoProps) {
 
   const deleteHandler = async (id: string) => {
     try {
+      dispatch(deselectTodos(id));
       dispatch(removeTodos(id));
       const response = await fetch(`http://localhost:8080/todo/${id}`, {
         method: "DELETE",
@@ -73,6 +74,7 @@ export default function SingleTodo(props: SingleTodoProps) {
         body: JSON.stringify({
           title,
           description,
+          updated_at: new Date().toISOString(),
         }),
       });
       const data = await response.json();
@@ -98,6 +100,7 @@ export default function SingleTodo(props: SingleTodoProps) {
         body: JSON.stringify({
           title,
           description,
+          updated_at: new Date().toISOString(),
         }),
       });
       const data = await response.json();

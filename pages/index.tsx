@@ -1,5 +1,5 @@
 import Head from "next/document";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setInitialTodos } from "@/features/todos/todoSlice";
 import TodoList from "@/features/todos/TodoList";
@@ -9,12 +9,21 @@ import BatchDeleteButton from "@/components/BatchDeleteButton";
 
 function App() {
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchTodos = async () => {
     try {
+      // setIsLoading(!isLoading);
       const response = await fetch("http://localhost:8080/todos");
       const data = await response.json();
-      dispatch(setInitialTodos(data));
+      console.log("FETCH RESPONSE:", data);
+      if (data) {
+        dispatch(setInitialTodos(data));
+        setIsLoading(!isLoading);
+      } else {
+        setIsLoading(!isLoading);
+        console.log("NO DATA");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -27,6 +36,7 @@ function App() {
 
   return (
     <>
+      {isLoading && <div className="w100 h100 cf">Loading...</div>}
       <TodoList />
       <NewTodo />
       <BatchDeleteButton />

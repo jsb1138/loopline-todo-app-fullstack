@@ -18,7 +18,7 @@ export default function ToDoList() {
   return (
     <>
       {Object.keys(todos).length === 0 ? (
-        <div className="w100 h100 cf">LOADING...</div>
+        <div className="w100 h100 cf">Add something</div>
       ) : (
         <section className="todo-list">
           <div className="todo-list-container" ref={parent}>
