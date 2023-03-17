@@ -10,15 +10,6 @@ const todoSlice = createSlice({
     setInitialTodos: (state, action) => {
       return action.payload;
     },
-    // setAllTodos: (state, action) => {
-    //   console.log("setAllTodos", action.payload);
-    //   return action.payload;
-    // return {
-    //   ...state,
-    //   todos: action.payload,
-    // };
-    // },
-    // // add todos
     addTodos: (state, action) => {
       state.push(action.payload);
       return state;

@@ -9,14 +9,13 @@ function NewToDo() {
   const [desc, setDesc] = useState<string>("");
   const [invalidInput, setInvalidInput] = useState<boolean>(false);
 
-  const onTitleChange = (e: React.ChangeEvent<HTMLFormElement>) =>
+  const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setTitle(e.target.value);
-  const onDescChange = (e: React.ChangeEvent<HTMLFormElement>) =>
+  const onDescChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setDesc(e.target.value);
 
-  const submitHandler = async (e: React.ChangeEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const handleNewTodoSubmission = async () => {
+    history.replaceState("object or string", "title", "");
     if (title && desc) {
       try {
         const newTodo = {
@@ -44,6 +43,11 @@ function NewToDo() {
         setInvalidInput(false);
       }, 2000);
     }
+  };
+
+  const submitHandler = async (e: React.ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    handleNewTodoSubmission();
   };
 
   return (

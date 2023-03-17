@@ -8,7 +8,7 @@ import SingleTodo from "./SingleTodo";
 import { Todo } from "@/redux/store";
 
 export default function ToDoList() {
-  const [selected, setSelected] = useState<string[]>(["HELLOOOOOOO"]);
+  const [selected, setSelected] = useState<string[]>([""]);
   const todos = useSelector(getTodos);
   const [parent] = useAutoAnimate({
     duration: 300,

@@ -7,18 +7,9 @@ const reducer = combineReducers({
   selectedTodos: selectedTodoReducer,
 });
 
-// const persistedReducer = persistReducer(persistConfig, reducer);
-
 export const store = configureStore({
   reducer: reducer,
-  // middleware: (getDefaultMiddleware) =>
-  //   getDefaultMiddleware({
-  //     serializableCheck: false,
-  //   }),
-  // preloadedState: loadState(),
 });
-
-// export const persistor = persistStore(store);
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;

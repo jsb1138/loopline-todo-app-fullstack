@@ -48,14 +48,12 @@ export default function SingleTodo(props: SingleTodoProps) {
     }
   };
 
-  // function cancelUpdateHandler(id: string) {
-  //   setCanEdit(!canEdit);
-  //   dispatch(editSelect({ type: "DESELECT", id }));
-  // }
+  function cancelUpdateHandler(id: string) {
+    setCanEdit(!canEdit);
+  }
 
   function updateHandler(id: string, title: string, description: string) {
-    // dispatch(deselectTodos(null));
-    // dispatch(editSelect({ type: "SELECT", id }));
+    dispatch(deselectTodos(id));
     setTitle(title);
     setDescription(description);
     setCanEdit(!canEdit);
@@ -78,10 +76,9 @@ export default function SingleTodo(props: SingleTodoProps) {
         }),
       });
       const data = await response.json();
-      console.log("UPDATE RESPONSE", data);
+      console.log("UPDATE RESPONSE:", data);
       dispatch(updateTodos({ id, title, description }));
       setCanEdit(!canEdit);
-      // dispatch(editSelect({ type: "DESELECT", id }));
     } catch (error) {}
   };
 
@@ -104,11 +101,12 @@ export default function SingleTodo(props: SingleTodoProps) {
         }),
       });
       const data = await response.json();
-      console.log("UPDATE RESPONSE", data);
+      console.log("UPDATE RESPONSE:", data);
       dispatch(updateTodos({ id, title, description }));
       setCanEdit(!canEdit);
-      // dispatch(editSelect({ type: "DESELECT", id }));
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   function handleSelect(id: string) {
