@@ -1,4 +1,3 @@
-import Head from "next/document";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setInitialTodos } from "@/features/todos/todoSlice";
