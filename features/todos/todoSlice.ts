@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { RootState } from "@/redux/store";
+import { RootState, Todo } from "@/redux/store";
 
-const initialState = [];
+const initialState: Todo[] = [];
 
 const todoSlice = createSlice({
   name: "todos",
