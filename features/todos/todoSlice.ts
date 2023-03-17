@@ -14,11 +14,9 @@ const todoSlice = createSlice({
       state.push(action.payload);
       return state;
     },
-    // // remove todos
     removeTodos: (state, action) => {
       return state.filter((item) => item.id !== action.payload);
     },
-    // // update todos
     updateTodos: (state, action) => {
       return state.map((todo) => {
         if (todo.id === action.payload.id) {
@@ -32,7 +30,6 @@ const todoSlice = createSlice({
         return todo;
       });
     },
-    // // delete selected todos
     deleteSelectedTodos: (state, action) => {
       return state.filter((todo) => {
         if (!action.payload.includes(todo.id)) {
