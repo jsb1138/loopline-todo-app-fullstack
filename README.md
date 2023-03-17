@@ -5,7 +5,7 @@ This version makes use of a Rest API built on a Go backend which employs an AWS 
 To run the app, clone the repo, install dependencies and then run the development server:
 
 ```bash
-git clone https://github.com/jsb1138/loopline-todo-app.git
+git clone https://github.com/jsb1138/loopline-todo-app-fullstack.git
 npm i
 npm run dev
 ```
