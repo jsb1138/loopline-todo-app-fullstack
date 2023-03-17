@@ -12,7 +12,6 @@ function App() {
 
   const fetchTodos = async () => {
     try {
-      // setIsLoading(!isLoading);
       const response = await fetch("http://3.125.43.144:8080/todos");
       const data = await response.json();
       if (data) {
