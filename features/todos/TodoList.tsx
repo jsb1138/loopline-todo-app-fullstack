@@ -7,13 +7,7 @@ import SingleTodo from "./SingleTodo";
 
 import { Todo } from "@/types/Todo";
 
-interface TodoListProps {
-  selected: string[];
-  setSelected: React.Dispatch<React.SetStateAction<string[]>>;
-}
-
-export default function ToDoList(props: TodoListProps) {
-  const { selected, setSelected } = props;
+export default function ToDoList() {
   const [parent] = useAutoAnimate({
     duration: 300,
     easing: "ease-in-out",
@@ -32,12 +26,7 @@ export default function ToDoList(props: TodoListProps) {
         <section className="todo-list">
           <div className="todo-list-container" ref={parent}>
             {todos.map((todo: Todo) => (
-              <SingleTodo
-                key={todo.id}
-                todo={todo}
-                selected={selected}
-                setSelected={setSelected}
-              />
+              <SingleTodo key={todo.id} todo={todo} />
             ))}
           </div>
         </section>

@@ -8,9 +8,9 @@ function App() {
   const [selected, setSelected] = useState<string[]>([]);
   return (
     <>
-      <TodoList setSelected={setSelected} selected={selected} />
+      <TodoList />
       <NewTodo />
-      <BatchDeleteButton selected={selected} setSelected={setSelected} />
+      <BatchDeleteButton />
       <BackgroundClickArea />
     </>
   );

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import EditIcon from "@/components/Icons/EditIcon";
 import DeleteIcon from "@/components/Icons/DeleteIcon";
 import CancelIcon from "@/components/Icons/CancelIcon";
@@ -9,15 +9,15 @@ import { deleteTodo } from "./TodoFetches/deleteTodo";
 import { updateTodo } from "./TodoFetches/updateTodo";
 
 import { Todo } from "@/types/Todo";
+import SelectedTodosContext from "@/context/selected-todos-context";
 
 type SingleTodoProps = {
   todo: Todo;
-  selected: string[];
-  setSelected: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 export default function SingleTodo(props: SingleTodoProps) {
-  const { todo, selected, setSelected } = props;
+  const { todo } = props;
+  const { selected, setSelected } = useContext(SelectedTodosContext);
   const [canEdit, setCanEdit] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");

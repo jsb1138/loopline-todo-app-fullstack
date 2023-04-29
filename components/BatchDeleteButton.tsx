@@ -1,15 +1,13 @@
+import { useContext } from "react";
 import DeleteAllIcon from "@/components/Icons/DeleteAllIcon";
 
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { batchDelete } from "@/features/todos/TodoFetches/batchDelete";
 
-interface BatchDeleteButtonProps {
-  selected: string[];
-  setSelected: React.Dispatch<React.SetStateAction<string[]>>;
-}
+import SelectedTodosContext from "@/context/selected-todos-context";
 
-export default function BatchDeleteButton(props: BatchDeleteButtonProps) {
-  const { selected, setSelected } = props;
+export default function BatchDeleteButton() {
+  const { selected, setSelected } = useContext(SelectedTodosContext);
 
   const queryClient = useQueryClient();
 
