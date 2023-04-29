@@ -1,20 +1,29 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
-import { getTodos } from "@/features/todos/todoSlice";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+
+import { useQuery } from "@tanstack/react-query";
+import { fetchTodos } from "./TodoFetches/fetchTodos";
 
 import SingleTodo from "./SingleTodo";
 
-import { Todo } from "@/redux/store";
+import { Todo } from "@/types/Todo";
 
-export default function ToDoList() {
-  const [selected, setSelected] = useState<string[]>([""]);
-  const todos = useSelector(getTodos);
+interface TodoListProps {
+  selected: string[];
+  setSelected: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+export default function ToDoList(props: TodoListProps) {
+  const { selected, setSelected } = props;
   const [parent] = useAutoAnimate({
     duration: 300,
     easing: "ease-in-out",
   });
 
+  const { isLoading, error, data: todos } = useQuery(["todos"], fetchTodos);
+
+  if (isLoading) return <div className="w100 h100 cf">Loading...</div>;
+
+  if (error) return <div className="w100 h100 cf">Error</div>;
   return (
     <>
       {Object.keys(todos).length === 0 ? (

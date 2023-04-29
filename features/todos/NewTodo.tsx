@@ -1,56 +1,50 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { addTodos } from "@/features/todos/todoSlice";
 import { nanoid } from "@reduxjs/toolkit";
 
+import { useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { addTodo } from "./TodoFetches/addTodo";
+
 function NewToDo() {
-  const dispatch = useDispatch();
   const [title, setTitle] = useState<string>("");
   const [desc, setDesc] = useState<string>("");
   const [invalidInput, setInvalidInput] = useState<boolean>(false);
+
+  const queryClient = useQueryClient();
 
   const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setTitle(e.target.value);
   const onDescChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setDesc(e.target.value);
 
-  const handleNewTodoSubmission = async () => {
-    history.replaceState("object or string", "title", "");
-    if (title && desc) {
-      try {
-        const newTodo = {
-          id: nanoid(),
-          title,
-          description: desc,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        };
-        dispatch(addTodos(newTodo));
-        setTitle("");
-        setDesc("");
-        const response = await fetch("http://3.125.43.144:8080/todo", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newTodo),
-        });
-        const data = await response.json();
-        console.log("POST RESPONSE:", data);
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      setInvalidInput(true);
-      setTimeout(() => {
-        setInvalidInput(false);
-      }, 2000);
-    }
-  };
+  const mutation = useMutation(addTodo, {
+    onSuccess: (newTodo) => {
+      queryClient.setQueryData(["todos"], (oldTodos: any) => [
+        ...oldTodos,
+        newTodo,
+      ]);
+    },
+  });
 
   const submitHandler = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    handleNewTodoSubmission();
+    if (title && desc) {
+      const newTodo = {
+        id: nanoid(),
+        title,
+        description: desc,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+      setTitle("");
+      setDesc("");
+      await mutation.mutateAsync(newTodo);
+      return;
+    }
+    setInvalidInput(true);
+    setTimeout(() => {
+      setInvalidInput(false);
+    }, 2000);
   };
 
   return (

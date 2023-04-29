@@ -1,52 +1,54 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
 import EditIcon from "@/components/Icons/EditIcon";
 import DeleteIcon from "@/components/Icons/DeleteIcon";
 import CancelIcon from "@/components/Icons/CancelIcon";
-import {
-  removeTodos,
-  updateTodos,
-  // selectTodos,
-  // deselectTodos,
-  // editSelect,
-} from "@/features/todos/todoSlice";
-import { getSelectedTodos } from "@/features/todos/selectedSlice";
-import { selectTodos, deselectTodos } from "./selectedSlice";
 
-import { Todo } from "@/redux/store";
+import { useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { deleteTodo } from "./TodoFetches/deleteTodo";
+import { updateTodo } from "./TodoFetches/updateTodo";
+
+import { Todo } from "@/types/Todo";
 
 type SingleTodoProps = {
   todo: Todo;
   selected: string[];
-  setSelected: any;
+  setSelected: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 export default function SingleTodo(props: SingleTodoProps) {
-  const selectedTodos = useSelector(getSelectedTodos);
-  const dispatch = useDispatch();
+  const { todo, selected, setSelected } = props;
   const [canEdit, setCanEdit] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
+
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation(deleteTodo, {
+    onSuccess: (id) => {
+      queryClient.invalidateQueries(["todos"]);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const updateMutation = useMutation(updateTodo, {
+    onSuccess: (id) => {
+      queryClient.invalidateQueries(["todos"]);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
 
   const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setTitle(e.target.value);
   const onDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setDescription(e.target.value);
 
-  const deleteHandler = async (id: string) => {
-    try {
-      dispatch(deselectTodos(id));
-      dispatch(removeTodos(id));
-      const response = await fetch(`http://3.125.43.144:8080/todo/${id}`, {
-        method: "DELETE",
-      });
-      const data = await response.json();
-      console.log("DELETE RESPONSE", data);
-      // setTodos(data);
-    } catch (error) {
-      console.log(error);
-    }
+  const deleteHandler = (id: string) => {
+    mutation.mutate(id);
   };
 
   function cancelUpdateHandler(id: string) {
@@ -54,81 +56,53 @@ export default function SingleTodo(props: SingleTodoProps) {
   }
 
   function updateHandler(id: string, title: string, description: string) {
-    dispatch(deselectTodos(id));
+    setSelected(selected.filter((todo) => todo !== id));
     setTitle(title);
     setDescription(description);
     setCanEdit(!canEdit);
   }
 
-  const updateClickHandler = async (
+  const updateClickHandler = (
     id: string,
     title: string,
     description: string
   ) => {
-    try {
-      const response = await fetch(`http://3.125.43.144:8080/todo/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title,
-          description,
-          updated_at: new Date().toISOString(),
-        }),
-      });
-      const data = await response.json();
-      console.log("UPDATE RESPONSE:", data);
-      dispatch(updateTodos({ id, title, description }));
+    if (title && description) {
+      updateMutation.mutate({ id, title, description });
       setCanEdit(!canEdit);
-    } catch (error) {}
+    } else {
+      alert("Please enter a title and description");
+    }
   };
 
-  const updateSubmissionHandler = async (
+  const updateSubmissionHandler = (
     e: React.FormEvent<HTMLFormElement>,
     id: string,
     title: string,
     description: string
   ) => {
     e.preventDefault();
-    try {
-      const response = await fetch(`http://3.125.43.144:8080/todo/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title,
-          description,
-          updated_at: new Date().toISOString(),
-        }),
-      });
-      const data = await response.json();
-      console.log("UPDATE RESPONSE:", data);
-      dispatch(updateTodos({ id, title, description }));
-      setCanEdit(!canEdit);
-    } catch (error) {
-      console.log(error);
-    }
+    updateMutation.mutate({ id, title, description });
+    setCanEdit(!canEdit);
   };
 
   function handleSelect(id: string) {
-    if (selectedTodos.includes(id)) {
-      dispatch(deselectTodos(id));
+    if (selected.includes(id)) {
+      setSelected(selected.filter((todo) => todo !== id));
       return;
     }
-    dispatch(selectTodos(id));
+    setSelected([...selected, id]);
   }
 
   return (
     <div
-      className={`todo fcsb ${
-        selectedTodos.includes(props.todo.id) && "slctd-del"
-      } ${canEdit && "slctd-edit"}`}
-      key={props.todo.id}
+      className={`todo fcsb ${selected.includes(todo.id) && "slctd-del"} ${
+        canEdit && "slctd-edit"
+      }`}
+      key={todo.id}
       onClick={(e) => {
         if (e.ctrlKey || e.metaKey) {
-          handleSelect(props.todo.id);
+          handleSelect(todo.id);
         }
       }}
     >
@@ -138,7 +112,7 @@ export default function SingleTodo(props: SingleTodoProps) {
             <form
               id="edit-form"
               onSubmit={(e) =>
-                updateSubmissionHandler(e, props.todo.id, title, description)
+                updateSubmissionHandler(e, todo.id, title, description)
               }
             >
               <label htmlFor="title"></label>
@@ -164,16 +138,14 @@ export default function SingleTodo(props: SingleTodoProps) {
           <div className="todo-actions fcsbc">
             <button
               className="action-btn cf"
-              onClick={() => cancelUpdateHandler(props.todo.id)}
+              onClick={() => cancelUpdateHandler(todo.id)}
             >
               <CancelIcon />
             </button>
             <button
               type="submit"
               className="action-btn cf"
-              onClick={() =>
-                updateClickHandler(props.todo.id, title, description)
-              }
+              onClick={() => updateClickHandler(todo.id, title, description)}
             >
               +
             </button>
@@ -182,14 +154,14 @@ export default function SingleTodo(props: SingleTodoProps) {
       ) : (
         <>
           <div className="todo-content">
-            <h3>{props.todo.title}</h3>
-            <p>{props.todo.description}</p>
+            <h3>{todo.title}</h3>
+            <p>{todo.description}</p>
           </div>
           <div className="todo-actions fcsbc">
             <button
               id="delete-btn"
               className="action-btn cf"
-              onClick={() => deleteHandler(props.todo.id)}
+              onClick={() => deleteHandler(todo.id)}
             >
               <DeleteIcon />
             </button>
@@ -197,11 +169,7 @@ export default function SingleTodo(props: SingleTodoProps) {
               id="edit-btn"
               className="action-btn cf"
               onClick={() =>
-                updateHandler(
-                  props.todo.id,
-                  props.todo.title,
-                  props.todo.description
-                )
+                updateHandler(todo.id, todo.title, todo.description)
               }
             >
               <EditIcon />

@@ -1,32 +1,36 @@
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { getSelectedTodos } from "@/features/todos/selectedSlice";
-import { deleteSelectedTodos } from "@/features/todos/todoSlice";
-import { deselectAllTodos } from "@/features/todos/selectedSlice";
 import DeleteAllIcon from "@/components/Icons/DeleteAllIcon";
 
-export default function BatchDeleteButton() {
-  const dispatch = useDispatch();
-  const selectedTodos = useSelector(getSelectedTodos);
+import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { batchDelete } from "@/features/todos/TodoFetches/batchDelete";
+
+interface BatchDeleteButtonProps {
+  selected: string[];
+  setSelected: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+export default function BatchDeleteButton(props: BatchDeleteButtonProps) {
+  const { selected, setSelected } = props;
+
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation(batchDelete, {
+    onSuccess: (ids) => {
+      queryClient.invalidateQueries(["todos"]);
+      setSelected([]);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
 
   const batchDeleteHandler = async (ids: string[]) => {
-    try {
-      const response = await fetch(`http://3.125.43.144:8080/todos/${ids}`, {
-        method: "DELETE",
-      });
-      const data = await response.json();
-      dispatch(deleteSelectedTodos(ids));
-      dispatch(deselectAllTodos(null));
-      console.log("DELETE RESPONSE:", data);
-    } catch (error) {
-      console.log(error);
-    }
+    await mutation.mutate(ids);
   };
 
   return (
     <div
-      className={`batch-del-btn ${selectedTodos.length >= 1 ? "show" : "hide"}`}
-      onClick={() => batchDeleteHandler(selectedTodos)}
+      className={`batch-del-btn ${selected.length >= 1 ? "show" : "hide"}`}
+      onClick={() => batchDeleteHandler(selected)}
     >
       <DeleteAllIcon />
     </div>
