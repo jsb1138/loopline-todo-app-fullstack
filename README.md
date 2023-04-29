@@ -1,6 +1,6 @@
 ## To Do App - Fullstack Version
 
-This is a To Do App that was assigned to me as a take-home coding challenge for a company called Loopline Systems. It passed, but I ended up choosing to work with another commpany. There is another version of this app in my repos that is not full stack and uses Redux with local storage (as per the specs of the challenge).
+This is a To Do App that was assigned to me as a take-home coding challenge for a company called Loopline Systems. It passed, but I ended up choosing to work with another company. There is another version of this app in my repos that is not full stack and uses Redux with local storage (as per the specs of the challenge).
 
 This version makes use of a Rest API built on a Go backend which employs an AWS Aurora PostgreSQL instance and is hosted on EC2. The Go backend is in my repos.
 
