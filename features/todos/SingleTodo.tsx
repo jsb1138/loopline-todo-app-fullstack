@@ -25,7 +25,7 @@ export default function SingleTodo(props: SingleTodoProps) {
   const queryClient = useQueryClient();
 
   const mutation = useMutation(deleteTodo, {
-    onSuccess: (id) => {
+    onSuccess: () => {
       queryClient.invalidateQueries(["todos"]);
     },
     onError: (error) => {
@@ -34,8 +34,19 @@ export default function SingleTodo(props: SingleTodoProps) {
   });
 
   const updateMutation = useMutation(updateTodo, {
-    onSuccess: (id) => {
-      queryClient.invalidateQueries(["todos"]);
+    onSuccess: (data) => {
+      setTitle(data.title);
+      setDescription(data.description);
+
+      queryClient.setQueryData(["todos"], (oldData: any) => {
+        return oldData.map((todo: Todo) => {
+          if (todo.id === data.id) {
+            console.log(data);
+            return data;
+          }
+          return todo;
+        });
+      });
     },
     onError: (error) => {
       console.log(error);
@@ -154,8 +165,8 @@ export default function SingleTodo(props: SingleTodoProps) {
       ) : (
         <>
           <div className="todo-content">
-            <h3>{todo.title}</h3>
-            <p>{todo.description}</p>
+            <h3>{title ? title : todo.title}</h3>
+            <p>{description ? description : todo.description}</p>
           </div>
           <div className="todo-actions fcsbc">
             <button

@@ -3,6 +3,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import SelectedTodosContext from "@/context/selected-todos-context";
 
+import "@/styles/globals.css";
+import type { AppProps } from "next/app";
+
+import Header from "@/features/header/Header";
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -12,11 +17,6 @@ const queryClient = new QueryClient({
     },
   },
 });
-
-import "@/styles/globals.css";
-import type { AppProps } from "next/app";
-
-import Header from "@/features/header/Header";
 
 export default function App({ Component, pageProps }: AppProps) {
   const [selected, setSelected] = useState<string[]>([]);
