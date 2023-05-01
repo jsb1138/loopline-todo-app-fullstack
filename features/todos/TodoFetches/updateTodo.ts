@@ -15,6 +15,7 @@ export const updateTodo = async ({
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
+      id,
       title,
       description,
       updated_at: new Date().toISOString(),

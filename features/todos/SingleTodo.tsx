@@ -39,13 +39,13 @@ export default function SingleTodo(props: SingleTodoProps) {
       setDescription(data.description);
 
       queryClient.setQueryData(["todos"], (oldData: any) => {
-        return oldData.map((todo: Todo) => {
+        const newData = oldData.map((todo: Todo) => {
           if (todo.id === data.id) {
-            console.log(data);
             return data;
           }
           return todo;
         });
+        return newData;
       });
     },
     onError: (error) => {
